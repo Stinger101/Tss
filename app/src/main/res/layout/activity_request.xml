@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.johnrarui.tss.RequestActivity">
+
+        <EditText
+            android:id="@+id/editTextSource"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Enter pickup location"
+            android:inputType="textPersonName"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
+        <Button
+            android:id="@+id/SearchViewSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SEARCH"
+            android:layout_marginTop="165dp"
+            android:layout_below="@+id/editTextSearch"
+            android:layout_centerHorizontal="true" />
+
+        <EditText
+            android:id="@+id/editTextSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/editTextSource"
+            android:layout_marginTop="16dp"
+            android:ems="10"
+            android:hint="Enter your destination"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/editTextVehicleType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/editTextSearch"
+            android:layout_marginTop="33dp"
+            android:ems="10"
+            android:hint="Enter vehicle class"
+            android:inputType="textPersonName"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <EditText
+            android:id="@+id/editTextCargoType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/editTextVehicleType"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignStart="@+id/editTextVehicleType"
+            android:layout_below="@+id/editTextVehicleType"
+            android:layout_marginTop="32dp"
+            android:ems="10"
+            android:hint="Enter Cargo type"
+            android:inputType="textPersonName" />
+
+</RelativeLayout>

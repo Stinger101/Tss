@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1052396532130",
+    "firebase_url": "https://scorpio-de36d.firebaseio.com",
+    "project_id": "scorpio-de36d",
+    "storage_bucket": "scorpio-de36d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1052396532130:android:56c01d7c431a131b",
+        "android_client_info": {
+          "package_name": "com.example.johnrarui.tss"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1052396532130-q56og8cm8jjebksqo4hde4fdga8fpp40.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.johnrarui.tss",
+            "certificate_hash": "30e70e091c2e0c28d9757a932fcd435f985e274a"
+          }
+        },
+        {
+          "client_id": "1052396532130-9fihgkf9pssj2jabdjjkt4eq21bevr7p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC7BBMmxQRrya8Erfjbmaru607-LqF9St4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1052396532130-9fihgkf9pssj2jabdjjkt4eq21bevr7p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
