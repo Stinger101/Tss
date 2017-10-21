@@ -31,10 +31,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import android.location.LocationListener;
+
+import com.firebase.geofire.GeoFire;
+import com.firebase.geofire.GeoLocation;
+import com.firebase.geofire.GeoQuery;
+import com.firebase.geofire.GeoQueryEventListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
@@ -58,7 +64,7 @@ import java.util.Locale;
 import java.util.Map;
 
 public class UserSideActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
+        implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback,GeoQueryEventListener, GoogleMap.OnCameraChangeListener  {
 
     private GoogleMap mMap;
     private String ad, pickup;
@@ -70,6 +76,16 @@ public class UserSideActivity extends AppCompatActivity
     JSONObject response;
     TextView mat, details;
     private FirebaseAuth mAuth;
+
+    private static final GeoLocation INITIAL_CENTER = new GeoLocation(37.7789, -122.4017);
+
+    private static final int INITIAL_ZOOM_LEVEL = 14;
+
+    private static final String GEO_FIRE_DB = "https://publicdata-transit.firebaseio.com";
+
+    private static final String GEO_FIRE_REF = GEO_FIRE_DB + "/_geofire";
+
+
 
     Geocoder geocoder;
     private LocationListener mLocationListener;
@@ -203,6 +219,7 @@ public class UserSideActivity extends AppCompatActivity
         first=map_values.getFirst();
 
 
+
         if (first!=null&&second!=null) {
             mMap.addMarker(new MarkerOptions()
                     .position(first)
@@ -232,7 +249,12 @@ public class UserSideActivity extends AppCompatActivity
             mLocationListener= new LocationListener() {
                 @Override
                 public void onLocationChanged(Location location) {
+
                     LatLng loc=new LatLng( location.getLatitude(),location.getLongitude());
+                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference("/geofire");
+                    GeoFire geoFire = new GeoFire(ref);
+                    GeoQuery geoQuery = geoFire.queryAtLocation(new GeoLocation(loc.latitude,loc.longitude), 0.6);
+
                     mMap.clear();
                     mMap.addMarker(new MarkerOptions()
                             .position(loc)
@@ -263,5 +285,35 @@ public class UserSideActivity extends AppCompatActivity
 //            mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
 //            mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
         }
+    }
+
+    @Override
+    public void onKeyEntered(String key, GeoLocation location) {
+
+    }
+
+    @Override
+    public void onKeyExited(String key) {
+
+    }
+
+    @Override
+    public void onKeyMoved(String key, GeoLocation location) {
+
+    }
+
+    @Override
+    public void onGeoQueryReady() {
+
+    }
+
+    @Override
+    public void onGeoQueryError(DatabaseError error) {
+
+    }
+
+    @Override
+    public void onCameraChange(CameraPosition cameraPosition) {
+
     }
 }
