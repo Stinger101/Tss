@@ -10,6 +10,8 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -24,6 +26,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.Interpolator;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
@@ -41,7 +45,10 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -75,6 +82,7 @@ public class UserSideActivity extends AppCompatActivity
     ProgressDialog progressDialog;
     JSONObject response;
     TextView mat, details;
+    LatLng loc1;
     private FirebaseAuth mAuth;
 
     private static final GeoLocation INITIAL_CENTER = new GeoLocation(37.7789, -122.4017);
@@ -89,6 +97,8 @@ public class UserSideActivity extends AppCompatActivity
 
     Geocoder geocoder;
     private LocationListener mLocationListener;
+    private Map<String,Marker> markers;
+    private Circle searchCircle;
 
     LocationManager mlocationManager;
     LatLng first, second;
@@ -251,14 +261,17 @@ public class UserSideActivity extends AppCompatActivity
                 public void onLocationChanged(Location location) {
 
                     LatLng loc=new LatLng( location.getLatitude(),location.getLongitude());
-                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference("/geofire");
+                    loc1=loc;
+                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference("geofire");
                     GeoFire geoFire = new GeoFire(ref);
                     GeoQuery geoQuery = geoFire.queryAtLocation(new GeoLocation(loc.latitude,loc.longitude), 0.6);
+
 
                     mMap.clear();
                     mMap.addMarker(new MarkerOptions()
                             .position(loc)
                             .title("your position"));
+                    searchCircle=mMap.addCircle(new CircleOptions().center(loc).radius(1000));
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(loc, 10));
 
                 }
@@ -287,8 +300,14 @@ public class UserSideActivity extends AppCompatActivity
         }
     }
 
+
+
     @Override
     public void onKeyEntered(String key, GeoLocation location) {
+        mMap.addMarker(new MarkerOptions()
+                .position(new LatLng(location.latitude,location.longitude))
+                .title(""));
+
 
     }
 
@@ -299,7 +318,12 @@ public class UserSideActivity extends AppCompatActivity
 
     @Override
     public void onKeyMoved(String key, GeoLocation location) {
+        Marker marker=this.markers.get(key);
+        if (marker != null) {
 
+            this.animateMarkerTo(marker, location.latitude, location.longitude);
+
+        }
     }
 
     @Override
@@ -314,6 +338,53 @@ public class UserSideActivity extends AppCompatActivity
 
     @Override
     public void onCameraChange(CameraPosition cameraPosition) {
+
+    }
+    private void animateMarkerTo(final Marker marker, final double lat, final double lng) {
+
+        final Handler handler = new Handler();
+
+        final long start = SystemClock.uptimeMillis();
+
+        final long DURATION_MS = 3000;
+
+        final Interpolator interpolator = new AccelerateDecelerateInterpolator();
+
+        final LatLng startPosition = marker.getPosition();
+
+        handler.post(new Runnable() {
+
+            @Override
+
+            public void run() {
+
+                float elapsed = SystemClock.uptimeMillis() - start;
+
+                float t = elapsed/DURATION_MS;
+
+                float v = interpolator.getInterpolation(t);
+
+
+
+                double currentLat = (lat - startPosition.latitude) * v + startPosition.latitude;
+
+                double currentLng = (lng - startPosition.longitude) * v + startPosition.longitude;
+
+                marker.setPosition(new LatLng(currentLat, currentLng));
+
+
+
+                // if animation is not finished yet, repeat
+
+                if (t < 1) {
+
+                    handler.postDelayed(this, 16);
+
+                }
+
+            }
+
+        });
 
     }
 }
